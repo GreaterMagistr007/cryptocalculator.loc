@@ -1,6 +1,6 @@
 <div id="weeklyCalculationMethods">
     <label>
-        Выбор способа расчета:
+        Выбор способа расчета <b>среднего за неделю</b>:
     </label>
 </div>
 
@@ -90,6 +90,57 @@
         error(text)
         {
             alert(text);
+        }
+
+        weeklyCalculationMethod1(pricesArr)
+        {
+            let sum = 0;
+            let count = 0;
+
+            let keys = {
+                'timestamp' : 0,
+                'price' : 1,
+            }
+
+            for (let i in (pricesArr)) {
+                if (parseInt(pricesArr[keys['timestamp']]) > 0 && parseFloat(pricesArr[keys['price']]) > 0) {
+                    sum += parseFloat(pricesArr[keys['price']]);
+                    count += 1;
+                }
+            }
+
+            return sum / count;
+        }
+
+        weeklyCalculationMethod2(pricesArr)
+        {
+            let keys = {
+                'timestamp' : 0,
+                'price' : 1,
+            }
+
+            let min = 0;
+            let max = 0;
+
+            for (let i in (pricesArr)) {
+                let price = parseFloat(pricesArr[keys['price']]);
+                if (parseInt(pricesArr[keys['timestamp']]) > 0 && price > 0) {
+                    if (min === 0 || price < min) {
+                        min = price;
+                    }
+
+                    if (max === 0 || price > max) {
+                        max = price;
+                    }
+                }
+            }
+
+            return parseFloat(min + max) / 2;
+        }
+
+        calculation(pricesArr)
+        {
+            return this[this.getMethod()](pricesArr);
         }
     }
 
