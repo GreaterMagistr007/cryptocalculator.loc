@@ -16,6 +16,7 @@
 
 <div class="container">
     <section id="settings" class="mp-3">
+        @include('components.calculationMethodsClass')
         @include('components.weeklyCalculationMethodsBlock')
 
     </section>

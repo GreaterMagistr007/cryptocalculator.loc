@@ -11,27 +11,13 @@
         'weeklyCalculationMethod2' : "(Минимальное + максимальное значение за период) / 2",
     };
 
-    class weeklyCalculationMethodSelector
+    class weeklyCalculationMethodSelector extends CalculationMethods
     {
         wrapperSelector = '#weeklyCalculationMethods';
 
-        // Родительский блок
-        wrapper;
-        // Выбранный метод
-        selectedMethod;
-
-        constructor(weeklyCalculationMethods) {
-            this.weeklyCalculationMethods = weeklyCalculationMethods;
+        constructor(calculationMethods) {
+            super(calculationMethods);
             this.fillWrapper();
-        }
-
-        getWrapper()
-        {
-            if (!this.wrapper) {
-                this.wrapper = document.querySelector(this.wrapperSelector);
-            }
-
-            return this.wrapper;
         }
 
         renderBlock(method, formula)
@@ -52,14 +38,16 @@
             let self = this;
             if (!this.getWrapper()) {
                 return self.error(
-                    `Класс weeklyCalculationMethodSelector не нашел wrapper с селектором ${wrapperSelector}`
+                    `Класс weeklyCalculationMethodSelector не нашел wrapper с селектором ${self.wrapperSelector}`
                 );
             }
 
-            for (let method in (this.weeklyCalculationMethods)) {
+            console.log(this.calculationMethods);
+
+            for (let method in (this.calculationMethods)) {
                 let formCheck = document.createElement('div');
                 this.getWrapper().appendChild(formCheck);
-                formCheck.innerHTML = this.renderBlock(method, this.weeklyCalculationMethods[method]);
+                formCheck.innerHTML = this.renderBlock(method, this.calculationMethods[method]);
                 formCheck.classList.add('weeklyCalculationMethodsFormCheck');
 
                 formCheck.querySelectorAll('input').forEach(function(input){
@@ -71,20 +59,6 @@
             }
 
             document.querySelector('.weeklyCalculationMethodsFormCheck input').click();
-        }
-
-        getMethod()
-        {
-            return this.selectedMethod;
-        }
-
-        setMethod(method)
-        {
-            if (!this.weeklyCalculationMethods[method]) {
-                return this.error(`Нет метода расчета "${method}"`);
-            }
-
-            this.selectedMethod = method;
         }
 
         error(text)
@@ -138,9 +112,12 @@
             return parseFloat(min + max) / 2;
         }
 
-        calculation(pricesArr)
+        calculation(weeklyPricesArr)
         {
-            return this[this.getMethod()](pricesArr);
+            for (let i in weeklyPricesArr) {
+                weeklyPricesArr[i].result = this[this.getMethod()](weeklyPricesArr[i]);
+            }
+            return weeklyPricesArr;
         }
     }
 
