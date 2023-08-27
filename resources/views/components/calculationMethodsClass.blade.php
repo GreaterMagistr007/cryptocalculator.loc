@@ -30,11 +30,18 @@
             }
 
             this.selectedMethod = method;
+
+            console.log(this.selectedMethod)
         }
 
         getMethod()
         {
             return this.selectedMethod;
+        }
+
+        error(text)
+        {
+            alert(text);
         }
     }
 </script>

@@ -58,11 +58,6 @@
             document.querySelector('.weeklyCalculationMethodsFormCheck input').click();
         }
 
-        error(text)
-        {
-            alert(text);
-        }
-
         weeklyCalculationMethod1(pricesArr)
         {
             let sum = 0;
@@ -118,5 +113,5 @@
         }
     }
 
-    let calculator = new weeklyCalculationMethodSelector(weeklyCalculationMethods);
+    let weekCalculator = new weeklyCalculationMethodSelector(weeklyCalculationMethods);
 </script>

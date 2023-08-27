@@ -18,6 +18,8 @@
     <section id="settings" class="mp-3">
         @include('components.calculationMethodsClass')
         @include('components.weeklyCalculationMethodsBlock')
+        <hr>
+        @include('components.monthCalculationMethodsBlock')
 
     </section>
     <section class="mp-3" id="result"></section>
