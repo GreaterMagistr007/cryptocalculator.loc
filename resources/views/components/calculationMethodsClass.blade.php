@@ -10,8 +10,6 @@
 
         constructor(calculationMethods) {
             this.calculationMethods = calculationMethods;
-            console.log(calculationMethods);
-            console.log(this.calculationMethods);
         }
 
         getWrapper()

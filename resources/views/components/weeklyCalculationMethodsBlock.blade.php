@@ -42,8 +42,6 @@
                 );
             }
 
-            console.log(this.calculationMethods);
-
             for (let method in (this.calculationMethods)) {
                 let formCheck = document.createElement('div');
                 this.getWrapper().appendChild(formCheck);
@@ -53,7 +51,6 @@
                 formCheck.querySelectorAll('input').forEach(function(input){
                     input.addEventListener('change', function(e){
                         self.setMethod(input.value);
-                        console.log(self.getMethod());
                     });
                 });
             }
