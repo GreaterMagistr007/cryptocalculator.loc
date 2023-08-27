@@ -15,8 +15,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <div class="container">
-    <section class="mp-3">
+    <section id="settings" class="mp-3">
+        @include('components.weeklyCalculationMethodsBlock')
 
     </section>
     <section class="mp-3" id="result"></section>
 </div>
+
+
+<style>
+    .formula {
+        font-weight: bold;
+    }
+</style>
