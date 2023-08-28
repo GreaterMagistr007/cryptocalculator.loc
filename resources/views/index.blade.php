@@ -25,6 +25,8 @@
             <hr>
             @include('components.monthCalculationMethodsBlock')
             <hr>
+            @include('components.monthCountSettingsSelector')
+
         </div>
 
         <script>
