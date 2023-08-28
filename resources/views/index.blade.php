@@ -44,7 +44,6 @@
                 if (settingsBlock.classList.contains('hidden')) {
                     settingsBlock.classList.remove('hidden');
                 } else {
-                    $(settingsBlock).hide(200);
                     settingsBlock.classList.add('hidden');
                 }
 
