@@ -6,11 +6,15 @@ use App\Models\Bitcoin;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class BitcoinController extends Controller
 {
     public function index()
     {
+        try {
+            Bitcoin::uploadNewPricesFromServer();
+        } catch (Exception $e){}
         return view('index');
     }
 
@@ -59,5 +63,10 @@ class BitcoinController extends Controller
 
         unset($queryResult, $carbon);
         return $result;
+    }
+
+    public function getData(Request $request)
+    {
+
     }
 }

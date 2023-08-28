@@ -5,6 +5,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class Bitcoin extends Model
 {
@@ -127,5 +129,39 @@ class Bitcoin extends Model
         $dateEnd = Carbon::create($dateEnd);
 
 
+    }
+
+    public static function uploadNewPricesFromServer()
+    {
+        $apiModel = new Gecco();
+        $maxDbTimestamp = self::getMaxTimestamp();
+        $timeStart = $maxDbTimestamp ? Carbon::create($maxDbTimestamp) : Carbon::create(self::DATE_START);
+        $timeEnd = Carbon::now();
+
+        $result = $apiModel->getPrices($timeStart->getTimestamp(), $timeEnd->getTimestamp());
+
+        foreach ($result as $point) {
+            self::addPointToDB($point);
+        }
+    }
+
+    public static function addPointToDB(array $point)
+    {
+        try {
+            $timestamp = Carbon::createFromTimestampMs($point[0])->format('Y-m-d H:i:s');
+            $price = $point[1];
+
+            DB::table('bitcoins')->insertOrIgnore([
+                'timestamp' => $timestamp,
+                'price' => $price
+            ]);
+        } catch (Exception $e) {
+            return;
+        }
+    }
+
+    public static function getMaxTimestamp()
+    {
+        return self::max('timestamp');
     }
 }

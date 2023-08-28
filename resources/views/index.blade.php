@@ -20,9 +20,10 @@
         @include('components.weeklyCalculationMethodsBlock')
         <hr>
         @include('components.monthCalculationMethodsBlock')
-
     </section>
     <section class="mp-3" id="result"></section>
+    @include('components.fetcherClass')
+{{--    @include('components.calculatorBlock')--}}
 </div>
 
 

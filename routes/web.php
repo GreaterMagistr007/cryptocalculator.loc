@@ -14,8 +14,7 @@ use \App\Http\Controllers\BitcoinController;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [BitcoinController::class, 'index']);
 
 Route::post('/add-points', [BitcoinController::class, 'addPrices']);
+Route::post('/get-data', [[BitcoinController::class, 'getData']]);
