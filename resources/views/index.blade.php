@@ -16,10 +16,47 @@
 
 <div class="container">
     <section id="settings" class="mp-3">
-        @include('components.calculationMethodsClass')
-        @include('components.weeklyCalculationMethodsBlock')
-        <hr>
-        @include('components.monthCalculationMethodsBlock')
+        <nav id="settings-nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <a id="settings-nav-selector" class="navbar-brand" href="#">Настройки</a>
+        </nav>
+        <div id="settings-block">
+            @include('components.calculationMethodsClass')
+            @include('components.weeklyCalculationMethodsBlock')
+            <hr>
+            @include('components.monthCalculationMethodsBlock')
+            <hr>
+        </div>
+
+        <script>
+            function toggleSettings() {
+                let href =  document.querySelector('#settings-nav a#settings-nav-selector');
+                if (!href) {
+                    return;
+                }
+
+                let settingsBlock = document.querySelector('#settings-block');
+                if (!settingsBlock) {
+                    return;
+                }
+
+                if (settingsBlock.classList.contains('hidden')) {
+                    settingsBlock.classList.remove('hidden');
+                } else {
+                    $(settingsBlock).hide(200);
+                    settingsBlock.classList.add('hidden');
+                }
+
+                href.classList.toggle('active');
+            }
+
+            document.querySelectorAll('#settings-nav a#settings-nav-selector').forEach(function(href){
+                href.addEventListener('click', function(e){
+                    e.preventDefault();
+                    toggleSettings();
+                });
+            });
+        </script>
+
     </section>
     <section class="mp-3" id="result"></section>
     @include('components.fetcherClass')
@@ -30,5 +67,8 @@
 <style>
     .formula {
         font-weight: bold;
+    }
+    .hidden {
+        display: none!important;
     }
 </style>
