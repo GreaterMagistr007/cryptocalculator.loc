@@ -69,6 +69,26 @@
             let uri = '/get-data';
 
             let data = self.getSettings();
+
+            for (let i in data) {
+                if (!data[i]) {
+                    console.error('Не получен ' + i + ' - отменяем запрос');
+                    return;
+                }
+            }
+
+            fetch (uri, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(function(response){
+                    console.log(response)
+                })
         }
     }
 

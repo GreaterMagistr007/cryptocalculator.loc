@@ -75,6 +75,11 @@ class BitcoinController extends Controller
 
     public function getData(Request $request)
     {
+        dd(
+            $request->monthCalculationMethod,
+            $request->monthCount,
+            $request->weekCalculationMethod
+        );
 
     }
 }
