@@ -31,6 +31,14 @@
 
             this.selectedMethod = method;
 
+            try {
+                if (weekCalculator.getMethod() && monthCalculator.getMethod() && fetcher) {
+                    fetcher.getDataFromInternalServer();
+                }
+            } catch (e) {
+                // Нам тут не нуно ошибок о несоздании объекта
+                // console.log(e);
+            }
             console.log(this.selectedMethod)
         }
 

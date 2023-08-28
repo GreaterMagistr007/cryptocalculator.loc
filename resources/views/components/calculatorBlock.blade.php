@@ -107,6 +107,7 @@
 
         fetchDataFromExternalServer()
         {
+            console.log('fetchDataFromExternalServer');
             let self = this;
             let uri = [
                 `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=${this.vs_currency}`,

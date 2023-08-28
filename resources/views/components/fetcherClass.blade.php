@@ -30,6 +30,7 @@
 
         uploadPricesToServer()
         {
+            let self = this;
             let uri = '/add-points';
 
             let data = this.dataObj;
@@ -44,8 +45,30 @@
             })
                 .then(response => response.json())
                 .then(function(response){
-                    console.log(response);
+                    return self.getDataFromInternalServer();
                 })
+        }
+
+        getSettings()
+        {
+            console.log('Собираем настройки');
+            let obj = {
+                'monthCount' : getMonthCount(),
+                'monthCalculationMethod' : monthCalculator.getMethod(),
+                'weekCalculationMethod' : weekCalculator.getMethod(),
+            };
+
+            console.log(obj);
+
+            return obj;
+        }
+
+        getDataFromInternalServer()
+        {
+            let self = this;
+            let uri = '/get-data';
+
+            let data = self.getSettings();
         }
     }
 

@@ -15,10 +15,16 @@
 <script>
 
     document.querySelectorAll('select#monthCount').forEach(function(el){
-        el.addEventListener('change', function(e){
-            console.log(el.value);
+        el.addEventListener('change', function(e) {
+            if (fetcher) {
+                fetcher.getDataFromInternalServer();
+            }
         });
-        console.log(el.value);
     });
+
+    function getMonthCount()
+    {
+        return document.querySelector('select#monthCount').value;
+    }
 
 </script>
