@@ -15,7 +15,13 @@ class BitcoinController extends Controller
         try {
             Bitcoin::uploadNewPricesFromServer();
         } catch (Exception $e){}
-        return view('index');
+
+        $variables = [
+            'fromTimestamp' => Carbon::create(Bitcoin::getMaxTimestamp())->getTimestamp(),
+            'toTimestamp' => Carbon::now()->getTimestamp(),
+        ];
+
+        return view('index', $variables);
     }
 
     public function addPrices(Request $request)
@@ -36,7 +42,9 @@ class BitcoinController extends Controller
             }
         }
 
-        return response('ok', 200);
+        return response([
+            'result' => 'success'
+        ], 200);
     }
 
     public static function addPointToDB($timestamp, $price)

@@ -49,5 +49,5 @@
         }
     }
 
-    let fetcher = new Fetcher(fromTimestamp, toTimestamp);
+    let fetcher = new Fetcher({!! $fromTimestamp !!}, {!! $toTimestamp !!});
 </script>
