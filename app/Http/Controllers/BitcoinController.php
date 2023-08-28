@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bitcoin;
+use App\Models\Date;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,11 +76,14 @@ class BitcoinController extends Controller
 
     public function getData(Request $request)
     {
-        dd(
-            $request->monthCalculationMethod,
-            $request->monthCount,
-            $request->weekCalculationMethod
-        );
+//        dd(
+//            $request->monthCalculationMethod,
+//            $request->monthCount,
+//            $request->weekCalculationMethod
+//        );
 
+        $datesArr = Date::getDatesBySubmonth($request->monthCount);
+
+        dd($datesArr);
     }
 }
