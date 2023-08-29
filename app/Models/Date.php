@@ -29,24 +29,38 @@ class Date extends Model
      */
     public static function getDatesBySubmonth($subMonths = 2):array
     {
-        $dateEnd = Carbon::now()->endOfMonth()->subMonth();
-        $dateStart = Carbon::now()->startOfMonth();
-
-        $subMonths -= 1;
-        while ($subMonths > 0) {
-            $dateStart->subMonth();
-            $subMonths -= 1;
-        }
-
         $result = [
-            'startTimestamp' => $dateStart->getTimestamp(),
-            'startDateTime' => $dateStart->format('d.m.Y H:i:s'),
-            'endTimestamp' => $dateEnd->getTimestamp(),
-            'endDateTime' => $dateEnd->format('d.m.Y H:i:s'),
-            'months' => self::dividePeriodByMonth($dateStart, $dateEnd)
+            'month' => []
         ];
 
-        return $result;
+        $month = new MonthCalculator(Carbon::now());
+
+        for ($i = 0; $i < $subMonths; $i++) {
+            $month = $month->getPreviousMonth();
+            $result['month'][$month->getMonthTitle()] = $month;
+        }
+
+        dd($result);
+
+
+//        $dateEnd = Carbon::now()->endOfMonth()->subMonth();
+//        $dateStart = Carbon::now()->startOfMonth();
+//
+//        $subMonths -= 1;
+//        while ($subMonths > 0) {
+//            $dateStart->subMonth();
+//            $subMonths -= 1;
+//        }
+//
+//        $result = [
+//            'startTimestamp' => $dateStart->getTimestamp(),
+//            'startDateTime' => $dateStart->format('d.m.Y H:i:s'),
+//            'endTimestamp' => $dateEnd->getTimestamp(),
+//            'endDateTime' => $dateEnd->format('d.m.Y H:i:s'),
+//            'months' => self::dividePeriodByMonth($dateStart, $dateEnd)
+//        ];
+//
+//        return $result;
     }
 
     /**
