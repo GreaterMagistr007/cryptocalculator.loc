@@ -23,7 +23,11 @@ class Date extends Model
         'December' => 'Декабрь',
     ];
 
-    public static function getDatesBySubmonth($subMonths = 2)
+    /**
+     * @param $subMonths
+     * @return array
+     */
+    public static function getDatesBySubmonth($subMonths = 2):array
     {
         $dateEnd = Carbon::now()->endOfMonth()->subMonth();
         $dateStart = Carbon::now()->startOfMonth();
@@ -35,15 +39,22 @@ class Date extends Model
         }
 
         $result = [
-            'dateStart' => $dateStart->format('Y-m-d H:i:s'),
-            'dateEnd' => $dateEnd->format('Y-m-d H:i:s'),
+            'startTimestamp' => $dateEnd->getTimestamp(),
+            'startDateTime' => $dateStart->format('Y-m-d H:i:s'),
+            'endTimestamp' => $dateEnd->getTimestamp(),
+            'endDateTime' => $dateEnd->format('Y-m-d H:i:s'),
             'months' => self::dividePeriodByMonth($dateStart, $dateEnd)
         ];
 
         return $result;
     }
 
-    public static function dividePeriodByMonth(Carbon $dateStart, Carbon $dateEnd)
+    /**
+     * @param Carbon $dateStart
+     * @param Carbon $dateEnd
+     * @return array
+     */
+    public static function dividePeriodByMonth(Carbon $dateStart, Carbon $dateEnd):array
     {
         $result = [];
 
@@ -73,14 +84,22 @@ class Date extends Model
         return $result;
     }
 
-    public static function getRussianMonth(Carbon $date)
+    /**
+     * @param Carbon $date
+     * @return string
+     */
+    public static function getRussianMonth(Carbon $date):string
     {
         return isset(self::MONTH_TITLES_TRANSLATIONS[$date->format('F')]) ?
             self::MONTH_TITLES_TRANSLATIONS[$date->format('F')] :
             $date->format('F');
     }
 
-    public static function divideMonthByWeeks(Carbon $monthDate)
+    /**
+     * @param Carbon $monthDate
+     * @return array
+     */
+    public static function divideMonthByWeeks(Carbon $monthDate):array
     {
         $firstMomentOfMonth = Carbon::createFromTimestamp($monthDate->startOfMonth()->getTimestamp());
         $lastMomentOfMonth = Carbon::createFromTimestamp($monthDate->endOfMonth()->getTimestamp());

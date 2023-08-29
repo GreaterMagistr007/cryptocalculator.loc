@@ -79,8 +79,8 @@ class BitcoinController extends Controller
 //            $request->weekCalculationMethod
 //        );
 
-        $datesArr = Date::getDatesBySubmonth($request->monthCount);
+        $result = Date::getDatesBySubmonth($request->monthCount);
 
-        dd($datesArr);
+        dd($result);
     }
 }
