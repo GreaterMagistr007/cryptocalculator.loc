@@ -40,9 +40,9 @@ class Date extends Model
 
         $result = [
             'startTimestamp' => $dateStart->getTimestamp(),
-            'startDateTime' => $dateStart->format('Y-m-d H:i:s'),
+            'startDateTime' => $dateStart->format('d.m.Y H:i:s'),
             'endTimestamp' => $dateEnd->getTimestamp(),
-            'endDateTime' => $dateEnd->format('Y-m-d H:i:s'),
+            'endDateTime' => $dateEnd->format('d.m.Y H:i:s'),
             'months' => self::dividePeriodByMonth($dateStart, $dateEnd)
         ];
 
