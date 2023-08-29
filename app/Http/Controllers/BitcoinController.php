@@ -82,6 +82,6 @@ class BitcoinController extends Controller
             $month->calculate($request->monthCalculationMethod);
         }
 
-        dd($result);
+        return view('components.resultBlock', ['months' => $result['month']]);
     }
 }

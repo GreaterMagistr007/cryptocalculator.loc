@@ -85,8 +85,9 @@
                 },
                 body: JSON.stringify(data)
             })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(function(response){
+                    document.querySelector('#result').innerHTML = response;
                     console.log(response)
                 })
         }

@@ -15,6 +15,8 @@ class MonthCalculator
     public string $endDateTime;
 
     public float $average;
+    public string $calculationMethod;
+    public string $relation;
 
     public array $weeks = [];
 
@@ -107,6 +109,19 @@ class MonthCalculator
         }
 
         $this->average = $this->$method();
+        try {
+            $this->average = (float)number_format(floatval($this->average), 2, '.', '');
+            $this->relation = number_format((100 - (28000 / $this->average) * 100), 2);
+            if (floatval($this->relation) > 0) {
+                $this->relation = '+' . $this->relation;
+            }
+        } catch (\Exception $e) {
+            $this->average = $this->$method();
+        }
+
+
+
+        $this->calculationMethod = self::AVAILABLE_CALCULATE_METHODS[$method];
 
         return $this->average;
     }
@@ -124,6 +139,9 @@ class MonthCalculator
     private function monthCalculationMethod2()
     {
         $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+        if (!$values) {
+            return 0;
+        }
         $sum = 0;
 
         foreach ($values as $value) {
@@ -136,6 +154,9 @@ class MonthCalculator
     private function monthCalculationMethod3()
     {
         $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+        if (!$values) {
+            return 0;
+        }
 
         $min = $values[0]->price;
         $max = $values[0]->price;

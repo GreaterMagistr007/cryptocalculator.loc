@@ -15,6 +15,7 @@ class WeekCalculator
     public string $startDateTime;
     public string $endDateTime;
 
+    public string $calculationMethod;
     public float $average;
 
     const DATETIME_FORMAT = 'd.m.Y H:i:s';
@@ -57,6 +58,12 @@ class WeekCalculator
         }
 
         $this->average = $this->$method();
+        try {
+            $this->average = (float)number_format(floatval($this->average), 2, '.', '');
+        } catch (\Exception $e) {
+            $this->average = $this->$method();
+        }
+        $this->calculationMethod = self::AVAILABLE_CALCULATE_METHODS[$method];
 
         return $this->average;
     }
@@ -66,17 +73,23 @@ class WeekCalculator
         $sum = 0;
 
         $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+        if (!$values) {
+            return 0;
+        }
 
         foreach ($values as $value) {
             $sum += $value->price;
         }
 
-        return $sum / count($values);
+        return floatval($sum / count($values));
     }
 
     private function weeklyCalculationMethod2()
     {
         $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+        if (!$values) {
+            return 0;
+        }
 
         $min = $values[0]->price;
         $max = $values[0]->price;
@@ -90,6 +103,6 @@ class WeekCalculator
             }
         }
 
-        return ($min + $min) / 2;
+        return floatval(($min + $min) / 2);
     }
 }
