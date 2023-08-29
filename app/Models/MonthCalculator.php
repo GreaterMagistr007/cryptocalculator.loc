@@ -77,17 +77,12 @@ class MonthCalculator
     {
         $date = Carbon::createFromTimestamp($this->startDate->getTimestamp());
 
-        $i = 0;
         while ($date <= $this->endDate) {
             $i++;
             $week = new WeekCalculator($date);
             $this->weeks[] = $week;
 
             $date = $week->getNextWeekInMonth()->startDate;
-
-            if ($i > 10) {
-                break;
-            }
         }
     }
 }
