@@ -165,8 +165,4 @@ class Bitcoin extends Model
         return self::max('timestamp');
     }
 
-    public static function calculateMonth($month)
-    {
-
-    }
 }

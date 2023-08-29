@@ -81,10 +81,6 @@ class BitcoinController extends Controller
 
         $result = Date::getDatesBySubmonth($request->monthCount);
 
-//        foreach ($result['months'] as $monthNumber => $month) {
-//            $result['months']['average'] =
-//        }
-
         dd($result);
     }
 }

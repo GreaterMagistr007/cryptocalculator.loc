@@ -40,61 +40,6 @@ class Date extends Model
             $result['month'][$month->getMonthTitle()] = $month;
         }
 
-        dd($result);
-
-
-//        $dateEnd = Carbon::now()->endOfMonth()->subMonth();
-//        $dateStart = Carbon::now()->startOfMonth();
-//
-//        $subMonths -= 1;
-//        while ($subMonths > 0) {
-//            $dateStart->subMonth();
-//            $subMonths -= 1;
-//        }
-//
-//        $result = [
-//            'startTimestamp' => $dateStart->getTimestamp(),
-//            'startDateTime' => $dateStart->format('d.m.Y H:i:s'),
-//            'endTimestamp' => $dateEnd->getTimestamp(),
-//            'endDateTime' => $dateEnd->format('d.m.Y H:i:s'),
-//            'months' => self::dividePeriodByMonth($dateStart, $dateEnd)
-//        ];
-//
-//        return $result;
-    }
-
-    /**
-     * @param Carbon $dateStart
-     * @param Carbon $dateEnd
-     * @return array
-     */
-    public static function dividePeriodByMonth(Carbon $dateStart, Carbon $dateEnd):array
-    {
-        $result = [];
-
-        $date = Carbon::createFromTimestamp($dateStart->getTimestamp());
-
-        while ($date <= $dateEnd) {
-            $date->startOfMonth();
-            $result[$date->format('m')] = [
-                'startTimestamp' => $date->getTimestamp(),
-                'endTimestamp' => $date->endOfMonth()->getTimestamp(),
-                'monthTitle' => self::getRussianMonth($date)
-            ];
-            $date->add(1, 'day');
-            $date->startOfMonth();
-        }
-
-        $result[$date->format('m')] = [
-            'startTimestamp' => $date->getTimestamp(),
-            'endTimestamp' => $dateEnd->endOfMonth()->getTimestamp(),
-            'monthTitle' => self::getRussianMonth($date)
-        ];
-
-        foreach ($result as $key => $month) {
-            $result[$key]['weeks'] = self::divideMonthByWeeks(Carbon::createFromTimestamp($month['startTimestamp']));
-        }
-
         return $result;
     }
 
