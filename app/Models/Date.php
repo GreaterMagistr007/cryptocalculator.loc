@@ -22,10 +22,9 @@ class Date extends Model
         'November' => 'Ноябрь',
         'December' => 'Декабрь',
     ];
+
     public static function getDatesBySubmonth($subMonths = 2)
     {
-        $result = [];
-
         $dateEnd = Carbon::now()->endOfMonth()->subMonth();
         $dateStart = Carbon::now()->startOfMonth();
 
@@ -40,12 +39,6 @@ class Date extends Model
             'dateEnd' => $dateEnd->format('Y-m-d H:i:s'),
             'months' => self::dividePeriodByMonth($dateStart, $dateEnd)
         ];
-
-//        foreach ($result['months']) {
-//
-//        }
-
-        dd($result);
 
         return $result;
     }
