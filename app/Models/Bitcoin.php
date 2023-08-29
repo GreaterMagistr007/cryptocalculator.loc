@@ -100,35 +100,9 @@ class Bitcoin extends Model
         );
     }
 
-    private function getPricesFromDB($timestampStart, $timestampEnd)
+    public static function getPricesFromDB(Carbon $startDateTime, Carbon $endDateTime)
     {
-        $minDbTimestamp = self::min('timestamp');
-        if (!$minDbTimestamp) {
-            return false;
-        }
-        $maxDbTimestamp = self::max('timestamp');
-
-//        $timestampStart = $minDbTimestamp > $timestampStart ? $minDbTimestamp : $timestampStart;
-//        $timestampEnd = $maxDbTimestamp < $timestampEnd ? $maxDbTimestamp : $timestampEnd;
-//
-//        $result = [
-//            'timestampStart' => $minDbTimestamp,
-//            'timestampEnd' => $maxDbTimestamp
-//        ];
-//
-//
-//        dd(
-//            $minDbTimestamp,
-//            $maxDbTimestamp
-//        );
-    }
-
-    public static function getCource($dateStart, $dateEnd)
-    {
-        $dateStart = Carbon::create($dateStart);
-        $dateEnd = Carbon::create($dateEnd);
-
-
+        return DB::table('bitcoins')->whereBetween('timestamp', [$startDateTime, $endDateTime])->get();
     }
 
     public static function uploadNewPricesFromServer()

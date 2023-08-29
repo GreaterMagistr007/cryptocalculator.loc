@@ -14,9 +14,17 @@ class MonthCalculator
     public string $startDateTime;
     public string $endDateTime;
 
+    public float $average;
+
     public array $weeks = [];
 
     const DATETIME_FORMAT = 'd.m.Y H:i:s';
+
+    const AVAILABLE_CALCULATE_METHODS = [
+        'monthCalculationMethod1' => '(недельное среднее 1 (НС1) + (НС2) + (НС3) + (НС4) + (НС5)) / (количество недель)',
+        'monthCalculationMethod2' => '(сумма всех значений за период) / (количество значений)',
+        'monthCalculationMethod3' => '(Минимальное + максимальное значение за период) / 2',
+    ];
 
     const MONTH_TITLES_TRANSLATIONS = [
         'January' => 'Январь',
@@ -83,5 +91,64 @@ class MonthCalculator
 
             $date = $week->getNextWeekInMonth()->startDate;
         }
+    }
+
+    public function calculateAllWeeks($method)
+    {
+        foreach ($this->weeks as $week) {
+            $week->calculate($method);
+        }
+    }
+
+    public function calculate($method)
+    {
+        if (!isset(self::AVAILABLE_CALCULATE_METHODS[$method])) {
+            throw new \DomainException('Нет недельного метода расчета "' . $method . '"');
+        }
+
+        $this->average = $this->$method();
+
+        return $this->average;
+    }
+
+    private function monthCalculationMethod1()
+    {
+        $sum = 0;
+        foreach ($this->weeks as $week) {
+            $sum += $week->average;
+        }
+
+        return $sum / count($this->weeks);
+    }
+
+    private function monthCalculationMethod2()
+    {
+        $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+        $sum = 0;
+
+        foreach ($values as $value) {
+            $sum += $value->price;
+        }
+
+        return $sum / count($values);
+    }
+
+    private function monthCalculationMethod3()
+    {
+        $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+
+        $min = $values[0]->price;
+        $max = $values[0]->price;
+
+        foreach ($values as $value) {
+            if ($min < $value->price) {
+                $min = $value->price;
+            }
+            if ($max > $value->price) {
+                $max = $value->price;
+            }
+        }
+
+        return ($min + $min) / 2;
     }
 }

@@ -15,7 +15,14 @@ class WeekCalculator
     public string $startDateTime;
     public string $endDateTime;
 
+    public float $average;
+
     const DATETIME_FORMAT = 'd.m.Y H:i:s';
+
+    const AVAILABLE_CALCULATE_METHODS = [
+        'weeklyCalculationMethod1' => '(сумма всех значений за период) / (количество значений)',
+        'weeklyCalculationMethod2' => '(Минимальное + максимальное значение за период) / 2',
+    ];
 
     public function __construct(Carbon $startDate)
     {
@@ -41,5 +48,48 @@ class WeekCalculator
     {
         $firstDayOfNextWeek = Carbon::createFromTimestamp($this->endTimestamp)->addDay();
         return new self($firstDayOfNextWeek);
+    }
+
+    public function calculate($method)
+    {
+        if (!isset(self::AVAILABLE_CALCULATE_METHODS[$method])) {
+            throw new \DomainException('Нет недельного метода расчета "' . $method . '"');
+        }
+
+        $this->average = $this->$method();
+
+        return $this->average;
+    }
+
+    private function weeklyCalculationMethod1()
+    {
+        $sum = 0;
+
+        $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+
+        foreach ($values as $value) {
+            $sum += $value->price;
+        }
+
+        return $sum / count($values);
+    }
+
+    private function weeklyCalculationMethod2()
+    {
+        $values = Bitcoin::getPricesFromDB($this->startDate, $this->endDate);
+
+        $min = $values[0]->price;
+        $max = $values[0]->price;
+
+        foreach ($values as $value) {
+            if ($min < $value->price) {
+                $min = $value->price;
+            }
+            if ($max > $value->price) {
+                $max = $value->price;
+            }
+        }
+
+        return ($min + $min) / 2;
     }
 }
