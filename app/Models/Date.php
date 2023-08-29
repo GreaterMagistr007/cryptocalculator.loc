@@ -39,7 +39,7 @@ class Date extends Model
         }
 
         $result = [
-            'startTimestamp' => $dateEnd->getTimestamp(),
+            'startTimestamp' => $dateStart->getTimestamp(),
             'startDateTime' => $dateStart->format('Y-m-d H:i:s'),
             'endTimestamp' => $dateEnd->getTimestamp(),
             'endDateTime' => $dateEnd->format('Y-m-d H:i:s'),
