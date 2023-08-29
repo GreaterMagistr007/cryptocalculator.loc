@@ -50,13 +50,10 @@ class BitcoinController extends Controller
 
     public static function addPointToDB($timestamp, $price)
     {
-//        $query = 'insert into bitcoins (timestamp, price) values (%s, %)';
-
         DB::table('bitcoins')->insertOrIgnore([
             'timestamp' => $timestamp,
             'price' => $price
         ]);
-//        DB::insert($query, [$timestamp, $price]);
     }
 
     public static function getAllSavedPricesAsArray()
