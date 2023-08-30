@@ -16,7 +16,8 @@ class BitcoinController extends Controller
     {
         try {
             Bitcoin::uploadNewPricesFromServer();
-        } catch (Exception $e){}
+        } catch (\Exception $e){}
+        catch (\Error $e){}
 
         $variables = [
             'fromTimestamp' => Carbon::create(Bitcoin::getMaxTimestamp())->getTimestamp(),

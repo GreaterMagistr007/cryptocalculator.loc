@@ -32,7 +32,9 @@ class Bitcoin extends Model
     {
         parent::__construct($attributes);
 
-        $this->apiModel = new Gecco();
+        try {
+            $this->apiModel = new Gecco();
+        } catch (\Exception $e) {} catch (\Error $e) {}
     }
 
     /**
@@ -61,14 +63,20 @@ class Bitcoin extends Model
 
     private function saveValuesFromServer($timestampStart, $timestampEnd)
     {
-        $result = $this->apiModel->getPrices($timestampStart, $timestampEnd);
+        try {
+            $result = $this->apiModel->getPrices($timestampStart, $timestampEnd);
 
-        foreach ($result as $key => $arr) {
-            $item = new self([
-                'timestamp' => Carbon::createFromTimestamp(intval((int)$arr[0] / 1000)),
-                'price' => $arr[1],
-            ]);
-            $item->save();
+            foreach ($result as $key => $arr) {
+                $item = new self([
+                    'timestamp' => Carbon::createFromTimestamp(intval((int)$arr[0] / 1000)),
+                    'price' => $arr[1],
+                ]);
+                $item->save();
+            }
+        } catch (\Exception $e) {
+            return [];
+        } catch (\Error $e) {
+            return [];
         }
     }
 
