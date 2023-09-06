@@ -13,12 +13,25 @@
         @foreach ($month->weeks as $weekNum => $week)
         <tr>
             <td scope="row">
-                Неделя {!! $weekNum + 1 !!} ({!! $week->startDateTime !!} - {!! $week->endDateTime !!})
-                : </td>
+                Неделя {!! $weekNum + 1 !!} ({!! $week->startDateTime !!} - {!! $week->endDateTime !!}):
+                @if ($week->calculateMethod === 'weeklyCalculationMethod2')
+                    <br>
+                    <small>
+                    Минимальное значение {!! $week->dateOfMinimum->format('d.m.Y H:i:s') !!} - {!! $week->minValueOfPeriod !!}
+                    <br>
+                    Максимальное значение {!! $week->dateOfMaximum->format('d.m.Y H:i:s') !!} - {!! $week->maxValueOfPeriod !!}
+
+                        <br>
+                        ({!! $week->minValueOfPeriod !!} + {!! $week->maxValueOfPeriod !!}) = {!! $week->minValueOfPeriod + $week->maxValueOfPeriod !!}
+                        <br>
+                        {!! $week->minValueOfPeriod + $week->maxValueOfPeriod !!} / 2 = {!! ($week->minValueOfPeriod + $week->maxValueOfPeriod) / 2 !!}
+                    </small>
+                @endif
+            </td>
             <td>
 
                 <span>
-                    {!! $week->average !!} $ / btc
+                    {!! number_format($week->average, 2, '.', '') !!} $ / btc
                 </span>
 
             </td>

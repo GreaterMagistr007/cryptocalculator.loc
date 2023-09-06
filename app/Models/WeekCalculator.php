@@ -15,8 +15,13 @@ class WeekCalculator
     public string $startDateTime;
     public string $endDateTime;
 
-    public string $calculationMethod;
+    public string $calculationMethod; // Текстовое обозначение метода расчета
+    public string $calculateMethod; // Название функции метода расчета
+
     public float $average;
+
+    public Carbon $dateOfMaximum;
+    public Carbon $dateOfMinimum;
 
     const DATETIME_FORMAT = 'd.m.Y H:i:s';
 
@@ -24,6 +29,9 @@ class WeekCalculator
         'weeklyCalculationMethod1' => '(сумма всех значений за период) / (количество значений)',
         'weeklyCalculationMethod2' => '(Минимальное + максимальное значение за период) / 2',
     ];
+
+    public float $minValueOfPeriod;
+    public float $maxValueOfPeriod;
 
     public function __construct(Carbon $startDate)
     {
@@ -57,6 +65,8 @@ class WeekCalculator
             throw new \DomainException('Нет недельного метода расчета "' . $method . '"');
         }
 
+        $this->calculateMethod = $method;
+
         $this->average = $this->$method();
         try {
             $this->average = (float)number_format(floatval($this->average), 2, '.', '');
@@ -77,11 +87,15 @@ class WeekCalculator
             return 0;
         }
 
+        $count = 0;
         foreach ($values as $value) {
-            $sum += $value->price;
+            if ($value->price > 0) {
+                $sum += $value->price;
+                $count ++;
+            }
         }
 
-        return floatval($sum / count($values));
+        return floatval($sum / $count);
     }
 
     private function weeklyCalculationMethod2()
@@ -91,18 +105,37 @@ class WeekCalculator
             return 0;
         }
 
-        $min = $values[0]->price;
-        $max = $values[0]->price;
+        $min = 0;
+        $max = 0;
+
+        $timeStampOfMaximum = $values[0]->timestamp;
+        $timeStampOfMinimum = $values[0]->timestamp;
 
         foreach ($values as $value) {
+            // Установим значения, если их не было
+            if ($min === 0) {
+                $min = $value->price;
+            }
+            if ($max === 0) {
+                $max = $value->price;
+            }
+
             if ($min < $value->price) {
                 $min = $value->price;
+                $timeStampOfMinimum = $value->timestamp;
             }
             if ($max > $value->price) {
                 $max = $value->price;
+                $timeStampOfMaximum = $value->timestamp;
             }
         }
 
-        return floatval(($min + $min) / 2);
+        $this->dateOfMaximum = Carbon::createFromFormat('Y-m-d H:i:s', $timeStampOfMaximum);
+        $this->dateOfMinimum = Carbon::createFromFormat('Y-m-d H:i:s', $timeStampOfMinimum);
+
+        $this->minValueOfPeriod = $min;
+        $this->maxValueOfPeriod = $max;
+
+        return ($max + $min) / 2;
     }
 }
