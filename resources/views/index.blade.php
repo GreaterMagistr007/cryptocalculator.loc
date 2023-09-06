@@ -20,11 +20,14 @@
             <a id="settings-nav-selector" class="navbar-brand" href="#">Настройки</a>
         </nav>
         <div id="settings-block">
-            @include('components.calculationMethodsClass')
-            @include('components.weeklyCalculationMethodsBlock')
-            <hr>
-            @include('components.monthCalculationMethodsBlock')
-            <hr>
+            <div class="hidden">
+                @include('components.calculationMethodsClass')
+                @include('components.weeklyCalculationMethodsBlock')
+                <hr>
+                @include('components.monthCalculationMethodsBlock')
+                <hr>
+            </div>
+
             @include('components.monthCountSettingsSelector')
 
         </div>

@@ -7,8 +7,8 @@
 <script>
     // Возможные варианты
     let weeklyCalculationMethods = {
-        'weeklyCalculationMethod1' : "(сумма всех значений за период) / (количество значений)",
         'weeklyCalculationMethod2' : "(Минимальное + максимальное значение за период) / 2",
+        'weeklyCalculationMethod1' : "(сумма всех значений за период) / (количество значений)",
     };
 
     class weeklyCalculationMethodSelector extends CalculationMethods
